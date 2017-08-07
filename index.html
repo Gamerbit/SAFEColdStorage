@@ -1,0 +1,157 @@
+﻿
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Gamerbits Cold Storage</title>
+		<meta charset="utf-8" />
+		<link rel="icon" href="favicon4.png" type="image/png"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+	</head>
+	<body class="homepage">
+		<div id="page-wrapper">
+
+
+
+					<div id="phaser-game" style="background-color: black;">
+						<!-- Logo -->
+							<div id="uglyguy-logo-image">
+								<h1 style="margin-bottom: -190px"><a href="index.html"><img src="images/logo2.png" style="width:30vw;height:45vh;padding-top:55px;z-index:3;background-color:white;background-image:url('images/gif.gif');background-size: contain;margin-top:10px;background-repeat:none;"></a></h1>
+							</div>
+					</div>
+
+
+
+			<!-- Footer -->
+				<div id="footer-wrapper" class="wrapper">
+					<div class="title">Gamerbits Cold Storage</div>
+					<div id="footer" class="container">
+
+
+
+
+
+							<div class="container">
+
+									<center>
+									<div class="container">
+										<center>
+											<button id="authorise" class="waves-effect waves-red btn black">Authorise</button>
+
+
+
+
+										<br><br><span id="buttonz"><input type="text" placeholder="TYPE CONTENT HERE" id="mdContent"/>
+										<input type="submit" value="UPLOAD AS MD" onclick="uploadMD()" /></span>
+
+
+								    <div id="output">
+
+								    </div>
+
+									</div>
+
+									<script>
+
+									window.onload = function() {
+								  document.getElementById('buttonz').style.display = 'none';
+								};
+
+								  function uploadMD() {
+										document.getElementById('buttonz').style.display="block";
+								    var content = document.getElementById('mdContent').value;
+								    window.safeMutableData.newRandomPublic(window.auth, 15001)
+								    .then(mdHandle => window.safeMutableData.quickSetup(mdHandle, {key1: content}))
+								    .then(mdHandle => {
+								      window.safeMutableData.get(mdHandle, 'key1')
+								      .then(value => {
+								        var utfString = String.fromCharCode.apply(null, new Uint8Array(value.buf));
+								        var parEl = document.getElementById('output');
+								        var childEl = document.createElement('div');
+								        childEl.textContent = utfString;
+								        parEl.appendChild(childEl);
+								      })
+								    })
+								  }
+
+									var auth;
+									var file = document.getElementById("file");
+									var filepath = document.getElementById("filepath");
+									var Container = "apps/gamerbits";
+
+									//Finds and adds EventListener on buttons
+									window.document.getElementById("authorise").addEventListener("click", function() {
+									  authorise();
+									});
+
+
+
+									//initialises and authorises with the network
+									function authorise() {
+									  var app = {
+									    name: "Currency Cold Storage",
+									    id: "gbits.io",
+									    vendor: "Gamerbits",
+								      scope: null
+									  };
+
+									  var permissions = {
+									    '_public': [
+									      'Read',
+									      'Insert',
+									      'Update',
+									      'Delete',
+									      'ManagePermissions'
+									    ],
+									    '_publicNames': [
+									      'Read',
+									      'Insert',
+									      'Update',
+									      'Delete',
+									      'ManagePermissions'
+									    ]
+									  };
+
+									  var owncontainer = {
+									    own_container: true
+									  };
+
+
+
+									  window.safeApp.initialise(app)
+									    .then((appToken) => {
+									      console.log("Initialise Token: " + appToken);
+
+
+									      window.safeApp.authorise(appToken, permissions, owncontainer)
+									        .then((auth) => {
+									          // console.log(auth);
+
+									          window.safeApp.connectAuthorised(appToken, auth)
+									            .then((authorisedAppToken) => {
+									              //returns authorised app token
+									              window.auth = authorisedAppToken;
+																	document.getElementById('authorise').style.display="none";
+																	document.getElementById('buttonz').style.display="block";
+									              console.log(authorisedAppToken);
+									            });
+									        });
+									    }, (err) => {
+									      console.error(err);
+									      // Materialize.toast(err, 3000, 'rounded');
+									    });
+									}
+
+
+									function uintToString(uintArray) {
+									  return new TextDecoder("utf-8").decode(uintArray);
+									}
+
+									</script>
+
+									<script src="app.js"></script>
+									<script src="phaser.js"></script>
+	</body>
+</html>
