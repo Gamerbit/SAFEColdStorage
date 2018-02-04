@@ -10,21 +10,6 @@ var Game = (function () {
     return Game;
 }());
 
-function uploadMD() {
-  var content = document.getElementById('mdContent').value;
-  window.safeMutableData.newRandomPublic(window.auth, 15001)
-  .then(mdHandle => window.safeMutableData.quickSetup(mdHandle, {key1: content}))
-  .then(mdHandle => {
-    window.safeMutableData.get(mdHandle, 'key1')
-    .then(value => {
-      var utfString = String.fromCharCode.apply(null, new Uint8Array(value.buf));
-      var parEl = document.getElementById('output');
-      var childEl = document.createElement('div');
-      childEl.textContent = utfString;
-      parEl.appendChild(childEl);
-    })
-  })
-}
 
 var Loader = (function () {
     function Loader() {
